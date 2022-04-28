@@ -6,29 +6,34 @@
 Summary:	Python Git Library
 Summary(pl.UTF-8):	Biblioteka Git dla Pythona
 Name:		python3-git
-Version:	3.1.26
-Release:	3
+Version:	3.1.27
+Release:	1
 License:	BSD
 Group:		Development/Languages/Python
-#Source0Download: https://github.com/gitpython-developers/GitPython/releases
+#Source0Download: https://github.com/gitpython-developers/GitPython/tags
 Source0:	https://github.com/gitpython-developers/GitPython/archive/%{version}/GitPython-%{version}.tar.gz
-# Source0-md5:	64aa168043fa344ae0dda9e0e969600a
-Patch0:		markdown.patch
+# Source0-md5:	105eaf93318203fb4ca447cb6bb77878
 URL:		https://pypi.org/project/GitPython/
-BuildRequires:	python3-modules >= 1:3.4
+# python 3.7 requires additionally typing-extensions>=3.7.4.3
+BuildRequires:	python3-modules >= 1:3.8
 BuildRequires:	python3-setuptools
 %if %{with tests}
 BuildRequires:	python3-ddt >= 1.1.1
-BuildRequires:	python3-gitdb >= 2.0.0
+BuildRequires:	python3-gitdb >= 4.0.1
+BuildRequires:	python3-gitdb < 5
+BuildRequires:	python3-pytest
+BuildRequires:	python3-pytest-cov
+BuildRequires:	python3-pytest-sugar
 %endif
 BuildRequires:	rpm-pythonprov
 BuildRequires:	rpmbuild(macros) >= 1.714
 %if %{with doc}
-BuildRequires:	python3-gitdb
-BuildRequires:	sphinx-pdg
+#BuildRequires:	python3-sphinx_autodoc_typehints
+BuildRequires:	python3-gitdb >= 4.0.1
+BuildRequires:	python3-sphinx_rtd_theme
+BuildRequires:	sphinx-pdg >= 4.3.0
 %endif
-Requires:	python3-modules >= 1:3.4
-Obsoletes:	GitPython
+Requires:	python3-modules >= 1:3.8
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -65,13 +70,20 @@ Dokumentacja API biblioteki GitPython.
 
 %prep
 %setup -q -n GitPython-%{version}
-%patch0 -p1
 
 %build
-%py3_build %{?with_tests:test}
+%py3_build
+
+%if %{with tests}
+PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 \
+PYTEST_PLUGINS=pytest_cov.plugin,pytest_sugar \
+%{__python3} -m pytest test
+%endif
 
 %if %{with doc}
-%{__make} -C doc html
+# disable -W, there are two "Actor" symbols
+%{__make} -C doc html \
+	SPHINXOPTS=
 %endif
 
 %install
@@ -84,7 +96,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc AUTHORS CHANGES LICENSE README.md
+%doc AUTHORS CHANGES LICENSE README.md SECURITY.md
 %dir %{py3_sitescriptdir}/git
 %{py3_sitescriptdir}/git/*.py
 %{py3_sitescriptdir}/git/index
