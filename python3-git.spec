@@ -6,13 +6,13 @@
 Summary:	Python Git Library
 Summary(pl.UTF-8):	Biblioteka Git dla Pythona
 Name:		python3-git
-Version:	3.1.27
+Version:	3.1.37
 Release:	1
 License:	BSD
 Group:		Development/Languages/Python
 #Source0Download: https://github.com/gitpython-developers/GitPython/tags
 Source0:	https://github.com/gitpython-developers/GitPython/archive/%{version}/GitPython-%{version}.tar.gz
-# Source0-md5:	105eaf93318203fb4ca447cb6bb77878
+# Source0-md5:	eae05ec2e472398341006dcf2423ce30
 URL:		https://pypi.org/project/GitPython/
 # python 3.7 requires additionally typing-extensions>=3.7.4.3
 BuildRequires:	python3-modules >= 1:3.8
