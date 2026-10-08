@@ -14,9 +14,8 @@ Group:		Development/Languages/Python
 Source0:	https://github.com/gitpython-developers/GitPython/archive/%{version}/GitPython-%{version}.tar.gz
 # Source0-md5:	d51fcd484634ae373e876369f0ebce77
 URL:		https://pypi.org/project/GitPython/
-# python 3.7 requires additionally mock
 BuildRequires:	python3-modules >= 1:3.8
-BuildRequires:	python3-setuptools
+BuildRequires:	python3-setuptools >= 1:62.6
 %if %{with tests}
 BuildRequires:	python3-ddt >= 1.1.1
 BuildRequires:	python3-gitdb >= 4.0.1
@@ -27,7 +26,7 @@ BuildRequires:	python3-pytest-instafail
 BuildRequires:	python3-pytest-mock
 BuildRequires:	python3-pytest-sugar
 %if "%{_ver_lt %{py3_ver} 3.11}" == "1"
-BuildRequires:	python3-typing_extensions
+BuildRequires:	python3-typing_extensions >= 3.10.0.2
 %endif
 %endif
 BuildRequires:	rpm-pythonprov
@@ -36,7 +35,7 @@ BuildRequires:	rpmbuild(macros) >= 1.714
 BuildRequires:	python3-gitdb >= 4.0.1
 BuildRequires:	python3-sphinx_autodoc_typehints
 BuildRequires:	python3-sphinx_rtd_theme
-BuildRequires:	sphinx-pdg >= 7.1.2
+BuildRequires:	sphinx-pdg >= 7.4.7
 %endif
 Requires:	python3-modules >= 1:3.8
 BuildArch:	noarch
